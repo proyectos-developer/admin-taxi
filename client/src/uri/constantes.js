@@ -1,7 +1,7 @@
 export const constantes = () => {
     return {
         url_principal: [
-            {url: 'http://taxi-huaraz.com/api'}
+            {url: 'http://admin.taxi-huaraz.com/api'}
         ],
         lista_tipo_documento: [
             {documento: 'D.N.I'},
