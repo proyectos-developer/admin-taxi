@@ -4,57 +4,72 @@ const router = express.Router()
 const pool = require('../database')
 const { isLoggedIn } = require('../lib/auth')
 
-router.post ('/calificacion', async (req, res) => {
-    const {calificacion, comentarios, conductor, viajero, id_viaje} = req.body
-    console.log ('entra 4')
+router.get ('/api/calificaciones/ordenar/:order_by/:order/:begin/:cantidad', async (req, res) => {
+    const {order_by, order, begin, cantidad} = req.params
     try {
-        const nuevaCalificacion = {calificacion, comentarios, conductor, viajero, id_viaje}
-        const nueva = await pool.query ('INSERT INTO calificaciones set ?', [nuevaCalificacion])
-
-        const califica = await pool.query ('SELECT * FROM calificaciones WHERE id = ?', [nueva.insertId])
-
-        return res.json ({
-            calificacion: califica[0],
-            success: true
-        })
+        
+        if (order_by === '0'){
+            const calificaciones = await pool.query (`SELECT SUM (calificaciones.calificacion) as calificacion, COUNT(calificaciones.id) as nro_calificaciones,
+                                                      conductores.foto_perfil, conductores.nombres, conductores.apellidos, conductores.nro_documento, calificaciones.conductor
+                                                      FROM calificaciones JOIN conductores ON conductores.usuario = calificaciones.conductor  
+                                                      GROUP BY calificaciones.conductor LIMIT ${begin},${cantidad}`)
+            if (parseInt(begin) === 0){
+                const total = await pool.query (`SELECT COUNT(*) FROM calificaciones GROUP BY conductor`)
+                return res.json ({
+                    calificaciones: calificaciones,
+                    total_calificaciones: total[0][`COUNT(*)`],
+                    success: true,
+                })
+            }else{
+                return res.json ({
+                    calificaciones: calificaciones,
+                    success: true,
+                })
+            }
+        }else{
+            const calificaciones = await pool.query (`SELECT SUM (calificaciones.calificacion) as calificacion, COUNT(calificaciones.id) as nro_calificaciones,
+                                                      conductores.foto_perfil, conductores.nombres, conductores.apellidos, conductores.nro_documento, calificaciones.conductor
+                                                      FROM calificaciones JOIN conductores ON conductores.usuario = calificaciones.conductor  
+                                                      GROUP BY calificaciones.conductor ORDER BY ${order_by} ${order} LIMIT ${begin},${cantidad}`)
+            if (parseInt(begin) === 0){
+                const total = await pool.query (`SELECT COUNT(*) FROM calificaciones GROUP BY conductor`)
+                return res.json ({
+                    calificaciones: calificaciones,
+                    total_calificaciones: total[0][`COUNT(*)`],
+                    success: true,
+                })
+            }else{
+                return res.json ({
+                    calificaciones: calificaciones,
+                    success: true,
+                })
+            }
+        }
     } catch (error) {
         console.log (error)
-        return res.json ({
-            error: error,
-            success: false
-        })
     }
 })
 
-router.get ('/calificaciones/conductor/:conductor', async (req, res) => {
-    const {conductor} = req.params
+router.get ('/api/calificaciones/conductor/:conductor/:begin/:cantidad', async (req, res) => {
+    const {conductor, begin, cantidad} = req.params
     console.log ('entra 4')
     try {
-        const calificaciones = await pool.query ('SELECT * FROM calificaciones WHERE conductor = ?', [conductor])
-
-        return res.json ({
-            calificaciones: calificaciones,
-            success: true
-        })
-    } catch (error) {
-        console.log (error)
-        return res.json ({
-            error: error,
-            success: false
-        })
-    }
-})
-
-router.get ('/calificacion/conductor/:id_calificacion', async (req, res) => {
-    const {id_calificacion} = req.params
-    console.log ('entra 4')
-    try {
-        const calificaciones = await pool.query ('SELECT * FROM calificaciones WHERE id = ?', [id_calificacion])
-
-        return res.json ({
-            calificaciones: calificaciones,
-            success: true
-        })
+        const calificaciones = await pool.query (`SELECT * FROM calificaciones JOIN usuarios_viajeros ON 
+                                                  usuarios_viajeros.usuario =  calificaciones.viajero WHERE calificaciones.conductor = ?
+                                                  LIMIT ${begin},${cantidad}`, [conductor])
+        if (parseFloat (begin) === 0){
+            const total = await pool.query (`SELECT COUNT(*) FROM calificaciones WHERE conductor = ?`, [conductor])
+            return res.json ({
+                calificaciones: calificaciones,
+                total_calificaciones: total[0][`COUNT(*)`],
+                success: true,
+            })
+        }else{
+            return res.json ({
+                calificaciones: calificaciones,
+                success: true
+            })
+        }
     } catch (error) {
         console.log (error)
         return res.json ({
