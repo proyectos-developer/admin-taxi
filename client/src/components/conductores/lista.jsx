@@ -8,14 +8,10 @@ import {conductoresConstants} from '../../uri/conductores-constants'
 import { set_filtro_conductores_search_order_amount, set_limpiar_filtros } from '../../redux/actions/filtrosactions.js'
 
 import clean from '../../iconos/clean_grey.png'
-import add_conductor from '../../iconos/add_white.png'
 import left from '../../iconos/left_grey.png'
 import right from '../../iconos/right_grey.png'
 
 import CardConductor from './cards/conductor.jsx'
-import ModalDelete from './modal/delete.jsx'
-import { set_nombre_delete, set_conductor_delete } from '../../redux/actions/conductoresactions'
-import { constantes } from '../../uri/constantes'
 
 export default function ListaConductores({proporcional}) {
 
@@ -39,10 +35,7 @@ export default function ListaConductores({proporcional}) {
     const [boton_anteriores, setBotonAnteriores] = useState (false)
     const [boton_posteriores, setBotonPosteriores] = useState (false)
 
-    const [boton_agregar, setBotonAgregar] = useState (false)
-
-    const {data_conductor, nombre_delete, conductor_delete} = useSelector(({conductoresreducer}) => conductoresreducer)
-    const {get_conductores_filtro_total, delete_conductor} = useSelector (({conductores}) => conductores)
+    const {get_conductores_filtro_total} = useSelector (({conductores}) => conductores)
     const {filtro_conductores_search_order_amount} = useSelector(({filtrosreducer}) => filtrosreducer)
 
     useEffect (() => {
@@ -76,11 +69,6 @@ export default function ListaConductores({proporcional}) {
             setListaConductores (lista)
         }
     }, [get_conductores_filtro_total])
-
-    useEffect (() => {
-        if (data_conductor && data_conductor.conductor && data_conductor.conductor.nombres){
-        }
-    }, [data_conductor])
 
     const ordenar_por_filtro = (value) => {
         setOrderBy(value)
@@ -258,6 +246,7 @@ export default function ListaConductores({proporcional}) {
                     )
                 }
             </div>
+            
             <div style={{width: 1480 / proporcional, height: 'auto', marginBottom: 25 / proporcional}}>
                 {
                     filtros.search !== 0 && filtros.order_by === 0 && filtros.id === 0 ? (
@@ -369,6 +358,7 @@ export default function ListaConductores({proporcional}) {
                     ) : null
                 }
             </div>
+            
             <div style={{width: 1480 / proporcional, height: 480 / proporcional}}>
                 {
                     lista_conductores && lista_conductores.length > 0 ? (
@@ -424,13 +414,6 @@ export default function ListaConductores({proporcional}) {
                         ) : null
                     }
                 </div>
-            </div>
-            <div className='position-absolute bottom-0 shadow-lg rounded-circle' 
-                onClick={() => navigate ('/home/conductores/nuevo-conductor')}
-                onMouseOver={() => setBotonAgregar(true)} onMouseLeave={() => setBotonAgregar(false)}
-                style={{width: 75 / proporcional, height: 75 / proporcional, background: '#9E9E9E', right: 240 / proporcional}}>
-                <img src={add_conductor} alt='' style={{cursor: 'pointer', width: boton_agregar ? 50 / proporcional : 60 / proporcional, 
-                    height: boton_agregar ? 50 / proporcional : 60 / proporcional, margin: boton_agregar ? 12.5 / proporcional : 7.5 / proporcional}}/>
             </div>
         </div>
     )

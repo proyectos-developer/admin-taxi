@@ -26,7 +26,7 @@ export default function PanelBeginTablet({proporcional}) {
   const begin = useSelector (({begin}) => begin)
 
   useEffect (() => {
-    if (window.localStorage.getItem('usuario')){
+    if (window.localStorage.getItem('session_id')){
       navigate ('/home')
     }
   }, [])
@@ -57,13 +57,12 @@ export default function PanelBeginTablet({proporcional}) {
   }
 
     return (
-        <div className='position-relative' style={{width: 991 / proporcional, height: 824 / proporcional, backgroundImage: `url()})`, 
-            backgroundPosition: 'center', backgroundRepeat: 'no-repeat'}}>
-              <div className='shadow-lg rounded top-50 start-50 position-absolute translate-middle' style={{width: 600 / proporcional, height: 'auto',
-                  background: 'white', left: '25%', padding: 20 / proporcional}}>
+        <div className='position-relative' style={{width: 976 / proporcional, height: '100vh'}}>
+              <div className='shadow-lg rounded top-50 start-50 position-absolute translate-middle' 
+                   style={{width: 600 / proporcional, height: 'auto', background: 'white', padding: 20 / proporcional}}>
                     <p style={{fontSize: 30 / proporcional, textAlign: 'center', lineHeight: `${34 / proporcional}px`, marginBottom: 25 / proporcional, color: '#212121', 
                                fontWeight: 600}}>
-                      INGRESE A <br/>SU PANEL ADMINISTRATIVO
+                      TAXI 24/7 hrs
                     </p>
                     <input type='email'
                       className='form-control'

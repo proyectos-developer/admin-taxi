@@ -26,7 +26,7 @@ export default function PanelBeginCell({proporcional}) {
   const begin = useSelector (({begin}) => begin)
 
   useEffect (() => {
-    if (window.localStorage.getItem('usuario')){
+    if (window.localStorage.getItem('session_id')){
       navigate ('/home')
     }
   }, [])
@@ -57,19 +57,18 @@ export default function PanelBeginCell({proporcional}) {
   }
 
     return (
-        <div className='position-relative' style={{width: 499 / proporcional, height: 824 / proporcional, backgroundImage: `url()`, 
-            backgroundPosition: 'center', backgroundRepeat: 'no-repeat'}}>
-              <div className='shadow-lg rounded top-50 start-50 position-absolute translate-middle' style={{width: 459 / proporcional, height: 'auto',
-                  background: 'white', left: '25%', padding: 20 / proporcional,}}>
+        <div className='position-relative' style={{width: 499 / proporcional, height: '100vh'}}>
+              <div className='shadow-lg rounded top-50 start-50 position-absolute translate-middle' 
+                   style={{width: 439 / proporcional, height: 'auto', background: 'white', padding: 20 / proporcional}}>
                     <p style={{fontSize: 30 / proporcional, textAlign: 'center', lineHeight: `${34 / proporcional}px`, marginBottom: 25 / proporcional, color: '#212121', 
-                               fontWeight: 600}}>
-                      INGRESE A <br/>SU PANEL ADMINISTRATIVO
+                               fontWeight: 439}}>
+                      TAXI 24/7 hrs
                     </p>
                     <input type='email'
                       className='form-control'
                       value={correo}
                       onChange={(event) => setCorreo(event.target.value)}
-                      style={{width: 419 / proporcional, height: 50 / proporcional, background: 'rgb(158,158,158, 0.6)', marginBottom: 25 / proporcional,
+                      style={{width: 399 / proporcional, height: 50 / proporcional, background: 'rgb(158,158,158, 0.6)', marginBottom: 25 / proporcional,
                             fontSize: 18 / proporcional, lineHeight: `${50 / proporcional}px`, border: ecorreo ? '1px solid red' : null}}
                       placeholder='Ingrese su correo'
                     />
@@ -77,7 +76,7 @@ export default function PanelBeginCell({proporcional}) {
                       className='form-control'
                       value={password}
                       onChange={(event) => setPassword(event.target.value)}
-                      style={{width: 419 / proporcional, height: 50 / proporcional, background: 'rgb(158,158,158, 0.6)', marginBottom: 25 / proporcional,
+                      style={{width: 399 / proporcional, height: 50 / proporcional, background: 'rgb(158,158,158, 0.6)', marginBottom: 25 / proporcional,
                             fontSize: 18 / proporcional, lineHeight: `${50 / proporcional}px`, border: epassword ? '1px solid red' : null}}
                       placeholder='Ingrese su contraseña'
                     />
@@ -89,15 +88,15 @@ export default function PanelBeginCell({proporcional}) {
                             </p>
                         ) : null
                     }
-                    <p style={{width: 419 / proporcional, fontSize: 16 / proporcional, textAlign: 'end', lineHeight: `${20 / proporcional}px`, marginBottom: 25 / proporcional, color: '#212121', 
+                    <p style={{width: 399 / proporcional, fontSize: 16 / proporcional, textAlign: 'end', lineHeight: `${20 / proporcional}px`, marginBottom: 25 / proporcional, color: '#212121', 
                                fontWeight: 600, textDecoration: 'underline', cursor: 'pointer'}}>
                       Olvide mi contraseña
                     </p>
-                    <div className='d-flex justify-content-center' style={{width: 419 / proporcional}}>
+                    <div className='d-flex justify-content-center' style={{width: 399 / proporcional}}>
                       <button className='btn' 
                           onMouseOver={() => setBotonIniciar(true)} onMouseLeave={() => setBotonIniciar(false)}
                           onClick={() => iniciar_sesion()}
-                          style={{width: boton_iniciar ? 530 / proporcional : 419 / proporcional, height: 50 / proporcional, background: '#212121', color: 'white', 
+                          style={{width: boton_iniciar ? 530 / proporcional : 399 / proporcional, height: 50 / proporcional, background: '#212121', color: 'white', 
                                   fontWeight: boton_iniciar ? 500 : 700, fontSize: boton_iniciar ? 16 / proporcional : 18 / proporcional}}>
                         INGRESAR</button>
                     </div>

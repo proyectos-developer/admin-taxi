@@ -8,17 +8,12 @@ import {conductoresConstants} from '../../uri/conductores-constants'
 import { set_filtro_conductores_search_order_amount, set_limpiar_filtros } from '../../redux/actions/filtrosactions.js'
 
 import clean from '../../iconos/clean_grey.png'
-import add_conductor from '../../iconos/add_white.png'
 import left from '../../iconos/left_grey.png'
 import right from '../../iconos/right_grey.png'
 
 import CardConductorCell from './cards/conductorcell.jsx'
-import ModalDelete from './modal/delete.jsx'
-import { set_nombre_delete, set_conductor_delete } from '../../redux/actions/conductoresactions'
-import { constantes } from '../../uri/constantes'
-import ModalCargando from '../modal/cargando'
 
-export default function ListaConductoresCell({proporcional}) {
+export default function ListaConductoresTablet({proporcional}) {
 
     const dispatch = useDispatch()
     const navigate = useNavigate()
@@ -40,10 +35,7 @@ export default function ListaConductoresCell({proporcional}) {
     const [boton_anteriores, setBotonAnteriores] = useState (false)
     const [boton_posteriores, setBotonPosteriores] = useState (false)
 
-    const [boton_agregar, setBotonAgregar] = useState (false)
-
-    const {data_conductor, nombre_delete, conductor_delete} = useSelector(({conductoresreducer}) => conductoresreducer)
-    const {get_conductores_filtro_total, delete_conductor} = useSelector (({conductores}) => conductores)
+    const {get_conductores_filtro_total} = useSelector (({conductores}) => conductores)
     const {filtro_conductores_search_order_amount} = useSelector(({filtrosreducer}) => filtrosreducer)
 
     useEffect (() => {
@@ -57,7 +49,7 @@ export default function ListaConductoresCell({proporcional}) {
         const cantidad = filtro_conductores_search_order_amount.amount
         setBegin (inicio)
         setAmount (cantidad)
-        dispatch(conductoresdata(conductoresConstants(id, search, order_by, order, filtro, id_filtro, inicio, 16, {}, false).get_conductores_filtro_total))
+        dispatch(conductoresdata(conductoresConstants(id, search, order_by, order, filtro, id_filtro, inicio, cantidad, {}, false).get_conductores_filtro_total))
     }, [])
 
     useEffect(() => {
@@ -66,16 +58,11 @@ export default function ListaConductoresCell({proporcional}) {
 
     useEffect (() => {
         if (get_conductores_filtro_total && get_conductores_filtro_total.conductores && get_conductores_filtro_total.success === true){
-          if (get_conductores_filtro_total.total_conductores){setTotalConductores(get_conductores_filtro_total.total_conductores)}
-          setConductores (get_conductores_filtro_total.conductores)
-          setListaConductores (get_conductores_filtro_total.conductores)
+            if (get_conductores_filtro_total.total_conductores){setTotalConductores(get_conductores_filtro_total.total_conductores)}
+            setConductores (get_conductores_filtro_total.conductores)
+            setListaConductores (get_conductores_filtro_total.conductores)
         }
     }, [get_conductores_filtro_total])
-
-    useEffect (() => {
-        if (data_conductor && data_conductor.conductor && data_conductor.conductor.nombres){
-        }
-    }, [data_conductor])
 
     const ordenar_por_filtro = (value) => {
         setOrderBy(value)
@@ -139,27 +126,81 @@ export default function ListaConductoresCell({proporcional}) {
 
     return ( 
         <div className='position-relative' style={{width: 499 / proporcional, paddingLeft: 20 / proporcional, paddingRight: 20 / proporcional}}>
-            <div className='d-flex' style={{width: 449 / proporcional, height: 50 / proporcional, marginBottom: 25 / proporcional }}>
-                <div className='d-flex' style={{width: 250 / proporcional, height: 50 / proporcional}}>
-                    <p className='mb-0' 
-                        style={{fontSize: 20 / proporcional, lineHeight: `${50 / proporcional}px`, fontWeight: 700, color: '#212121', 
-                                marginRight: 5 / proporcional, fontFamily: `'Lora', serif`}}>
-                        TUS CONDUCTORES ({total_conductores}):
-                    </p>
-                </div>
-                <div className='d-flex' style={{width: 199 / proporcional, height: 50 / proporcional}}>
-                    <p className='mb-0' 
-                        style={{fontSize: 16 / proporcional, lineHeight: `${50 / proporcional}px`, fontWeight: 500, color: '#757575',  
-                                fontFamily: `Mukta, sans-serif`}}>
-                        mostrando del {begin} al {begin + conductores.length}
-                    </p>
-                </div>
+            <div className='d-flex' style={{width: 459 / proporcional, height: 50 / proporcional, marginBottom: 25 / proporcional }}>
+                <p className='mb-0' 
+                    style={{fontSize: 20 / proporcional, lineHeight: `${50 / proporcional}px`, fontWeight: 400, color: '#212121', 
+                            marginRight: 10 / proporcional, fontFamily: `'Lora', serif`}}>
+                    CONDUCTORES:
+                </p>
+                <p className='mb-0' 
+                    style={{fontSize: 16 / proporcional, lineHeight: `${50 / proporcional}px`, fontWeight: 500, color: '#757575',  
+                            fontFamily: `Mukta, sans-serif`}}>
+                    del {begin} al {begin + conductores.length} de {total_conductores}
+                </p>
+                {/**<div className='' style={{width: 350 / proporcional, height: 50 / proporcional, marginLeft: 10 / proporcional, marginRight: 10 / proporcional}}>
+                    <div className='d-flex shadow-sm bg-white rounded' 
+                        style={{width: 350 / proporcional, height: 50 / proporcional, border: '1px solid #B2DFDB', borderRadius: 4 / proporcional, marginLeft: 10 / proporcional,
+                                marginRight: 10 / proporcional}}>
+                        <p style={{fontFamily: 'Mukta, sans-serif', width: 98 / proporcional, heigh: 48 / proporcional, fontSize: 16 / proporcional, 
+                                lineHeight: `${48 / proporcional}px`, color: '#757575', marginLeft: 10 / proporcional, fontWeight: 600, cursor: 'default'}} className='mb-0'>Ordenar por:</p>
+                        <input
+                            style={{width: 242 / proporcional, height: 46 / proporcional, fontSize: 18 / proporcional, lineHeight: `${46 / proporcional}px`, fontWeight: 500, color: '#212121',
+                                    cursor: 'default', fontFamily: 'Mukta, sans-serif'}}
+                            className='form-select fira-fans-sans-serif border-0'
+                            onClick={() => setShowOrdenarPor (true)}
+                            onFocus={() => setShowOrdenarPor (true)}
+                            onChange={() => setOrderBy(order_by)}
+                            defaultValue={order_by === '' ? 'Seleccionar' : order_by.split ('-')[0] === 'created_at' ? 'conductores creados' : order_by.split ('-')[0] + ' ' + (order_by.split('-')[1] === 'asc' ? 'ascendente' : 'descendente')}
+                        />
+                    </div>
+                    {
+                        show_ordenar_por ? (
+                            <div className='position-absolute h-100' style={{background: 'rgba(189, 189, 189, 0.4)', zIndex: 90000, width: 1920 / proporcional,
+                                    left: 0 / proporcional, top: -50 / proporcional}} onClick={() => setShowOrdenarPor(false)}>
+                                <div className='position-absolute shadow-lg bg-body rounded' 
+                                    style={{width: 350 / proporcional, padding: 10 / proporcional, background: 'white', borderRadius: 4 / proporcional, top: 100 / proporcional, zIndex: 9999, 
+                                            left: 1000 / proporcional}}>
+                                    <p className='mb-0'
+                                        style={{fontSize: 18 / proporcional, lineHeight: `${20 / proporcional}px`, color: '#212121', fontWeight: 500, cursor: 'default', textAlign: 'center',
+                                                marginBottom: 7.5 / proporcional, fontFamily: 'Mukta, sans-serif'}}>
+                                            Seleccionar filtro
+                                    </p>
+                                    <div style={{width: 330 / proporcional, height: 2 / proporcional, border: '1px dashed #BDBDBD', marginTop: 2 / proporcional, marginBottom: 2 / proporcional}}/>
+                                    <div style={{width: 330 / proporcional, minHeight: 40 / proporcional, maxHeight: 100 / proporcional, height: 'auto', padding: 2 / proporcional}} className='overflow-auto'>
+                                        {
+                                            constantes().lista_ordenar_conductores.map ((ordenar, index) => {
+                                                return (
+                                                    <p key={index} className='mb-0 cursor-pointer' onClick={() => {ordenar_por_filtro(ordenar.ordenar_por); setShowOrdenarPor(false)}}
+                                                        onMouseOver={() => setSeleccionarOrdenarPor (ordenar.ordenar_por)} onMouseLeave={() => setSeleccionarOrdenarPor('')}
+                                                        style={{fontSize: 18 / proporcional, lineHeight: `${20 / proporcional}px`, color: seleccionar_ordenarpor === ordenar.ordenar_por ? 'white' : '#212121', fontWeight: 500, 
+                                                                background: seleccionar_ordenarpor === ordenar.ordenar_por ? '#BDBDBD' : 'white', marginTop: 5 / proporcional, marginBottom: 7.5 / proporcional, borderRadius: 4 / proporcional,
+                                                                fontFamily: 'Mukta, sans-serif', cursor: 'pointer'}}>
+                                                            {ordenar.ordenar}
+                                                    </p>
+                                                )
+                                            })
+                                        }
+                                    </div>
+                                    <div style={{width: 330 / proporcional, height: 2 / proporcional, border: '1px dashed #BDBDBD', marginTop: 5 / proporcional, marginBottom: 5 / proporcional}}/>
+                                    <p className='mb-0 cursor-pointer' onClick={() => setShowOrdenarPor(false)}
+                                            onMouseOver={() => setSeleccionarOrdenarPor ('Cerrar')} onMouseLeave={() => setSeleccionarOrdenarPor('')}
+                                            style={{fontSize: 18 / proporcional, lineHeight: `${20 / proporcional}px`, color: seleccionar_ordenarpor === 'Cerrar' ? 'white' : '#212121', fontWeight: 500, 
+                                                    background: seleccionar_ordenarpor === 'Cerrar' ? '#BDBDBD' : 'white', marginTop: 5 / proporcional, marginBottom: 7.5 / proporcional, borderRadius: 4 / proporcional,
+                                                    fontFamily: 'Mukta, sans-serif', cursor: 'pointer'}}>
+                                            Cerrar
+                                    </p>
+                                </div>
+                            </div>
+                        ) : null
+                    }
+                </div>**/}
             </div>
-            <div style={{width: 449 / proporcional, height: 'auto', marginBottom: 25 / proporcional}}>
+            
+            <div style={{width: 459 / proporcional, height: 'auto', marginBottom: 25 / proporcional}}>
                 {
                     filtros.search !== 0 && filtros.order_by === 0 && filtros.id === 0 ? (
-                        <div className='d-flex' style={{width: 449 / proporcional, height: 50 / proporcional, paddingLeft: 10 / proporcional, paddingRight: 10 / proporcional, marginBottom: 7.5 / proporcional}}>
-                            <div className='d-flex justify-content-center' style={{width: 224.5 / proporcional}}>
+                        <div className='d-flex' style={{width: 459 / proporcional, height: 50 / proporcional, paddingLeft: 10 / proporcional, paddingRight: 10 / proporcional, marginBottom: 7.5 / proporcional}}>
+                            <div className='d-flex justify-content-center' style={{width: 493.33 / proporcional}}>
                                 <p className='mb-0' 
                                     style={{fontSize: 20 / proporcional, lineHeight: `${20 / proporcional}px`, color: '#212121', paddingTop: 15 / proporcional, 
                                             paddingBottom: 15 / proporcional, fontFamily: 'Mukta, sans-serif', fontWeight: 600}}>
@@ -168,8 +209,8 @@ export default function ListaConductoresCell({proporcional}) {
                             </div>
                         </div>
                     ): filtros.search === 0 && filtros.order_by !== 0 && filtros.id === 0  ? (
-                        <div className='d-flex' style={{width: 449 / proporcional, height: 50 / proporcional, paddingLeft: 10 / proporcional, paddingRight: 10 / proporcional, marginBottom: 7.5 / proporcional}}>
-                            <div className='d-flex justify-content-center' style={{width: 224.5 / proporcional}}>
+                        <div className='d-flex' style={{width: 459 / proporcional, height: 50 / proporcional, paddingLeft: 10 / proporcional, paddingRight: 10 / proporcional, marginBottom: 7.5 / proporcional}}>
+                            <div className='d-flex justify-content-center' style={{width: 493.33 / proporcional}}>
                                 <p className='mb-0' 
                                     style={{fontSize: 20 / proporcional, lineHeight: `${20 / proporcional}px`, color: '#212121', paddingTop: 15 / proporcional, 
                                             paddingBottom: 15 / proporcional, fontFamily: 'Mukta, sans-serif', fontWeight: 600}}>
@@ -179,8 +220,8 @@ export default function ListaConductoresCell({proporcional}) {
                             </div>
                         </div>
                     ): filtros.search === 0 && filtros.order_by === 0 && filtros.id !== 0  ? (
-                        <div className='d-flex' style={{width: 449 / proporcional, height: 50 / proporcional, paddingLeft: 10 / proporcional, paddingRight: 10 / proporcional, marginBottom: 7.5 / proporcional}}>
-                            <div className='d-flex justify-content-center' style={{width: 224.5 / proporcional}}>
+                        <div className='d-flex' style={{width: 459 / proporcional, height: 50 / proporcional, paddingLeft: 10 / proporcional, paddingRight: 10 / proporcional, marginBottom: 7.5 / proporcional}}>
+                            <div className='d-flex justify-content-center' style={{width: 493.33 / proporcional}}>
                                 <p className='mb-0' 
                                     style={{fontSize: 20 / proporcional, lineHeight: `${20 / proporcional}px`, color: '#212121', paddingTop: 15 / proporcional, 
                                             paddingBottom: 15 / proporcional, fontFamily: 'Mukta, sans-serif', fontWeight: 600}}>
@@ -189,15 +230,15 @@ export default function ListaConductoresCell({proporcional}) {
                             </div>
                         </div>
                     ) : filtros.search !== 0 && filtros.order_by !== 0 && filtros.id === 0 ? (
-                        <div className='d-flex' style={{width: 449 / proporcional, height: 50 / proporcional, paddingLeft: 10 / proporcional, paddingRight: 10 / proporcional, marginBottom: 7.5 / proporcional}}>
-                            <div className='d-flex justify-content-center' style={{width: 224.5 / proporcional, borderRight: '2px solid #BDBDBD'}}>
+                        <div className='d-flex' style={{width: 459 / proporcional, height: 50 / proporcional, paddingLeft: 10 / proporcional, paddingRight: 10 / proporcional, marginBottom: 7.5 / proporcional}}>
+                            <div className='d-flex justify-content-center' style={{width: 493.33 / proporcional, borderRight: '2px solid #BDBDBD'}}>
                                 <p className='mb-0' 
                                     style={{fontSize: 20 / proporcional, lineHeight: `${20 / proporcional}px`, color: '#212121', paddingTop: 15 / proporcional, 
                                             paddingBottom: 15 / proporcional, fontFamily: 'Mukta, sans-serif', fontWeight: 600}}>
                                     <span style={{color: '#757575', fontSize: 18 / proporcional, linHeight: `${20 / proporcional}px`, fontWeight: 500}}>Buscar por:</span> "{filtros.search}"
                                 </p>
                             </div>
-                            <div className='d-flex justify-content-center' style={{width: 224.5 / proporcional}}>
+                            <div className='d-flex justify-content-center' style={{width: 493.33 / proporcional}}>
                                 <p className='mb-0' 
                                     style={{fontSize: 20 / proporcional, lineHeight: `${20 / proporcional}px`, color: '#212121', paddingTop: 15 / proporcional, 
                                             paddingBottom: 15 / proporcional, fontFamily: 'Mukta, sans-serif', fontWeight: 600}}>
@@ -206,15 +247,15 @@ export default function ListaConductoresCell({proporcional}) {
                             </div>
                         </div>
                     ) : filtros.search !== 0 && filtros.order_by === 0 && filtros.id !== 0 ? (
-                        <div className='d-flex' style={{width: 449 / proporcional, height: 50 / proporcional, paddingLeft: 10 / proporcional, paddingRight: 10 / proporcional, marginBottom: 7.5 / proporcional}}>
-                            <div className='d-flex justify-content-center' style={{width: 224.5 / proporcional, borderRight: '2px solid #BDBDBD'}}>
+                        <div className='d-flex' style={{width: 459 / proporcional, height: 50 / proporcional, paddingLeft: 10 / proporcional, paddingRight: 10 / proporcional, marginBottom: 7.5 / proporcional}}>
+                            <div className='d-flex justify-content-center' style={{width: 493.33 / proporcional, borderRight: '2px solid #BDBDBD'}}>
                                 <p className='mb-0' 
                                     style={{fontSize: 20 / proporcional, lineHeight: `${20 / proporcional}px`, color: '#212121', paddingTop: 15 / proporcional, 
                                             paddingBottom: 15 / proporcional, fontFamily: 'Mukta, sans-serif', fontWeight: 600}}>
                                     <span style={{color: '#757575', fontSize: 18 / proporcional, linHeight: `${20 / proporcional}px`, fontWeight: 500}}>Buscar por:</span> "{filtros.search}"
                                 </p>
                             </div>
-                            <div className='d-flex justify-content-center' style={{width: 224.5 / proporcional}}>
+                            <div className='d-flex justify-content-center' style={{width: 493.33 / proporcional}}>
                                 <p className='mb-0' 
                                     style={{fontSize: 20 / proporcional, lineHeight: `${20 / proporcional}px`, color: '#212121', paddingTop: 15 / proporcional, 
                                             paddingBottom: 15 / proporcional, fontFamily: 'Mukta, sans-serif', fontWeight: 600}}>
@@ -223,15 +264,15 @@ export default function ListaConductoresCell({proporcional}) {
                             </div>
                         </div>
                     ) : filtros.search === 0 && filtros.order_by !== 0 && filtros.id !== 0 ? (
-                        <div className='d-flex' style={{width: 449 / proporcional, height: 50 / proporcional, paddingLeft: 10 / proporcional, paddingRight: 10 / proporcional, marginBottom: 7.5 / proporcional}}>
-                            <div className='d-flex justify-content-center' style={{width: 224.5 / proporcional, borderRight: '2px solid #BDBDBD'}}>
+                        <div className='d-flex' style={{width: 459 / proporcional, height: 50 / proporcional, paddingLeft: 10 / proporcional, paddingRight: 10 / proporcional, marginBottom: 7.5 / proporcional}}>
+                            <div className='d-flex justify-content-center' style={{width: 493.33 / proporcional, borderRight: '2px solid #BDBDBD'}}>
                                 <p className='mb-0' 
                                     style={{fontSize: 20 / proporcional, lineHeight: `${20 / proporcional}px`, color: '#212121', paddingTop: 15 / proporcional, 
                                             paddingBottom: 15 / proporcional, fontFamily: 'Mukta, sans-serif', fontWeight: 600}}>
                                     <span style={{color: '#757575', fontSize: 18 / proporcional, linHeight: `${20 / proporcional}px`, fontWeight: 500}}>Ordenar por:</span> "{filtros.order_by === 'nombres' ? 'nombres' : filtros.order_by === 'codigo' ? 'código proveedor' : filtros.order_by === 'created_at' ? 'proveedor creado' : ''}"
                                 </p>
                             </div>
-                            <div className='d-flex justify-content-center' style={{width: 224.5 / proporcional}}>
+                            <div className='d-flex justify-content-center' style={{width: 493.33 / proporcional}}>
                                 <p className='mb-0' 
                                     style={{fontSize: 20 / proporcional, lineHeight: `${20 / proporcional}px`, color: '#212121', paddingTop: 15 / proporcional, 
                                             paddingBottom: 15 / proporcional, fontFamily: 'Mukta, sans-serif', fontWeight: 600}}>
@@ -240,22 +281,22 @@ export default function ListaConductoresCell({proporcional}) {
                             </div>
                         </div>
                     ) : filtros.search !== 0 && filtros.order_by !== 0 && filtros.id !== 0 ? (
-                        <div className='d-flex' style={{width: 449 / proporcional, height: 50 / proporcional, paddingLeft: 10 / proporcional, paddingRight: 10 / proporcional, marginBottom: 7.5 / proporcional}}>
-                            <div className='d-flex justify-content-center' style={{width: 224.5 / proporcional, borderRight: '2px solid #BDBDBD'}}>
+                        <div className='d-flex' style={{width: 459 / proporcional, height: 50 / proporcional, paddingLeft: 10 / proporcional, paddingRight: 10 / proporcional, marginBottom: 7.5 / proporcional}}>
+                            <div className='d-flex justify-content-center' style={{width: 493.33 / proporcional, borderRight: '2px solid #BDBDBD'}}>
                                 <p className='mb-0' 
                                     style={{fontSize: 20 / proporcional, lineHeight: `${20 / proporcional}px`, fontWeight: 500, color: '#212121', paddingTop: 15 / proporcional, 
                                             paddingBottom: 15 / proporcional, fontFamily: 'Mukta, sans-serif'}}>
                                     <span style={{color: '#757575', fontSize: 18 / proporcional, linHeight: `${20 / proporcional}px`, fontWeight: 600}}>Buscar por:</span> "{filtros.search}"
                                 </p>
                             </div>
-                            <div className='d-flex justify-content-center' style={{width: 224.5 / proporcional, borderRight: '2px solid #BDBDBD'}}>
+                            <div className='d-flex justify-content-center' style={{width: 493.33 / proporcional, borderRight: '2px solid #BDBDBD'}}>
                                 <p className='mb-0' 
                                     style={{fontSize: 20 / proporcional, lineHeight: `${20 / proporcional}px`, fontWeight: 500, color: '#212121', paddingTop: 15 / proporcional, 
                                             paddingBottom: 15 / proporcional, fontFamily: 'Mukta, sans-serif'}}>
                                     <span style={{color: '#757575', fontSize: 18 / proporcional, linHeight: `${20 / proporcional}px`, fontWeight: 600}}>ordenar por:</span> "{filtros.order_by === 'nombres' ? 'nombres' : filtros.order_by === 'codigo' ? 'código proveedor' : filtros.order_by === 'created_at' ? 'proveedor creado' : ''}"
                                 </p>
                             </div>
-                            <div className='d-flex justify-content-center' style={{width: 224.5 / proporcional}}>
+                            <div className='d-flex justify-content-center' style={{width: 493.33 / proporcional}}>
                                 <p className='mb-0' 
                                     style={{fontSize: 20 / proporcional, lineHeight: `${20 / proporcional}px`, fontWeight: 500, color: '#212121', paddingTop: 15 / proporcional, 
                                             paddingBottom: 15 / proporcional, fontFamily: 'Mukta, sans-serif'}}>
@@ -266,22 +307,23 @@ export default function ListaConductoresCell({proporcional}) {
                     ) : null
                 }
             </div>
-            <div style={{width: 449 / proporcional, maxHeight: 2240 / proporcional, minHeight: 560 / proporcional, height: 'auto'}}>
+            
+            <div style={{width: 459 / proporcional, minHeight: 480 / proporcional}}>
                 {
                     lista_conductores && lista_conductores.length > 0 ? (
                         lista_conductores.map ((conductor, numcon) => {
                             return (
-                              <div key={numcon}  
-                                  style={{marginBottom: 7.5 / proporcional}}>
-                                  <CardConductorCell conductor={conductor} key={numcon} index={numcon} proporcional={proporcional}/>
-                              </div>
+                                <div key={numcon} className='d-flex' 
+                                    style={{marginBottom: 12.5 / proporcional}}>
+                                    <CardConductorCell conductor={conductor} key={numcon} index={numcon} proporcional={proporcional}/>
+                                </div>
                             )
                         })
                     ) : null
                 }
             </div>
-            <div className='d-flex' style={{width: 449 / proporcional, height: 50 / proporcional}}>
-                <div className='d-flex justify-content-start' style={{width: 224.5 / proporcional, height: 50 / proporcional}}>
+            <div className='d-flex' style={{width: 459 / proporcional, height: 50 / proporcional}}>
+                <div className='d-flex justify-content-start' style={{width: 375 / proporcional, height: 50 / proporcional}}>
                     {
                         begin !== 0 && conductores.length > 0 ? (
                             <img className='cursor-pointer' src={left} 
@@ -292,7 +334,7 @@ export default function ListaConductoresCell({proporcional}) {
                     }                    
                 </div>
                 <div className='d-flex' style={{width: 900 / proporcional, height: 50 / proporcional}}/>
-                <div className='d-flex justify-content-end' style={{width: 224.5 / proporcional, height: 50 / proporcional}}>
+                <div className='d-flex justify-content-end' style={{width: 375 / proporcional, height: 50 / proporcional}}>
                     {
                         conductores.length > 0 && begin + amount < total_conductores  ? (
                             <img className='cursor-pointer' src={right} 
@@ -303,14 +345,6 @@ export default function ListaConductoresCell({proporcional}) {
                     }
                 </div>
             </div>
-            <div className='position-absolute shadow-lg rounded-circle' 
-                onClick={() => navigate ('/home/conductores/nuevo-conductor')}
-                onMouseOver={() => setBotonAgregar(true)} onMouseLeave={() => setBotonAgregar(false)}
-                style={{width: 60 / proporcional, height: 60 / proporcional, background: '#9E9E9E', right: 40 / proporcional, bottom: 40 / proporcional}}>
-                <img src={add_conductor} alt='' style={{cursor: 'pointer', width: boton_agregar ? 40 / proporcional : 50 / proporcional, 
-                    height: boton_agregar ? 40 / proporcional : 50 / proporcional, margin: boton_agregar ? 10 / proporcional : 5 / proporcional}}/>
-            </div>
-            <ModalCargando loading={conductores.loading}/>
         </div>
     )
 }

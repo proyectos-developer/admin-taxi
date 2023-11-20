@@ -1,23 +1,53 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 
 import { useState } from 'react'
 import { Outlet, useNavigate } from 'react-router-dom'
 
-import icono_menu_left from '../../assets/iconos/menu_left.png'
-import icono_menu_right from '../../assets/iconos/menu_right.png'
-
 import { set_open_menu_izquierdo } from '../../redux/actions/menuactions'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+
+import icono_menu_left     from '../../iconos/menu_left.png'
+import icono_menu_right    from '../../iconos/menu_right.png'
+
+import menu_home           from '../../iconos/icono_menu_home.png'
+import menu_taxi           from '../../iconos/icono_menu_taxi.png'
+import menu_usuario        from '../../iconos/icono_menu_usuario.png'
+import menu_calificaciones from '../../iconos/icono_menu_calificaciones.png'
+import menu_viajes         from '../../iconos/icono_menu_viajes.png'
+import menu_estadisticas   from '../../iconos/icono_menu_estadisticas.png'
+import menu_ingresos       from '../../iconos/icono_menu_ingresos.png'
+import menu_cerrar_sesion  from '../../iconos/icono_menu_cerrar_sesion.png'
+
+import {begindata} from '../../redux/slice/begindata'
+import { beginConstants } from '../../uri/begin-constants'
+
+//import MenuLateral         from './menu/lateral.jsx'
 
 export default function HomePanel({proporcional}) {
 
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const [open, setOpen] = useState (false)
+  
+  const {log_out} = useSelector(({begin}) => begin)
 
-  const cerrar_sesion = () => {
-    
-  }
+  const [open, setOpen] = useState (false)
+  
+    useEffect (() => {
+        if (log_out && log_out.success === true){
+            borrar_datos_sesion()
+        }
+    }, [log_out])
+
+    const borrar_datos_sesion = async() => {
+            window.localStorage.removeItem('correo')
+            window.localStorage.removeItem('session_id')
+            dispatch (begindata(beginConstants({}, true, 0).log_out))
+            navigate('/')
+    }
+
+    const cerrar_sesion = () => {
+        dispatch (begindata(beginConstants({}, false, 0).log_out))
+    }
 
   return (
     <div style={{width: 1920 / proporcional}}>
@@ -40,45 +70,95 @@ export default function HomePanel({proporcional}) {
                   cursor: 'pointer'}}
                 className='position-absolute end-0'/>
         </div>
-        <div className='d-flex'>
-          {
-            open ? (
-              <div style={{width: 250 / proporcional, background: 'rgba(39, 39, 39, 0.6)', height: 842 / proporcional, padding: 20 / proporcional}} className='shadow-sm'>
-                <div style={{width: 210 / proporcional, height: 52}}>
-                  <p style={{fontSize: 20 / proporcional, color: 'white', lineHeight: `${35 / proporcional}px`, fontWeight: 500, cursor: 'pointer',
-                            marginBottom: 5}} onClick={() => navigate('home/conductores')}>Conductores</p>
-                  <div style={{width: 210 / proporcional, height: 2 / proporcional, background: 'white'}}/>
+        {
+          open ? (
+            <div style={{width: 300 / proporcional, background: 'rgba(39, 39, 39, 0.9)', height: 842 / proporcional, padding: 20 / proporcional, top: 75 / proporcional,
+                zIndex: 99999}} 
+                className='shadow-sm position-absolute start-0'>
+                <div style={{width: 260 / proporcional, height: 57 / proporcional, marginBottom: 20 / proporcional}}>
+                    <div className='d-flex' style={{width: 260 / proporcional, height: 35 / proporcional, marginBottom: 10 / proporcional, cursor: 'pointer'}} 
+                                                    onClick={() => {navigate(''); setOpen(!open)}}>
+                    <img src={menu_home} style={{width: 25 / proporcional, height: 25 / proporcional, marginLeft: 5 / proporcional, marginRight: 15 / proporcional,
+                        marginTop: 5 / proporcional, marginBottom: 5 / proporcional}}/>
+                    <p style={{fontSize: 20 / proporcional, color: 'white', lineHeight: `${35 / proporcional}px`, fontWeight: 500, cursor: 'pointer',
+                                marginBottom: 0}}>Inicio</p>
+                    </div>
+                    <div style={{width: 260 / proporcional, height: 2 / proporcional, background: 'white'}}/>
                 </div>
-                <div style={{width: 210 / proporcional, height: 52}}>
-                  <p style={{fontSize: 20 / proporcional, color: 'white', lineHeight: `${35 / proporcional}px`, fontWeight: 500, cursor: 'pointer',
-                            marginBottom: 5}} onClick={() => navigate('home/usuarios')}>Usuarios</p>
-                  <div style={{width: 210 / proporcional, height: 2 / proporcional, background: 'white'}}/>
+                <div style={{width: 260 / proporcional, height: 57 / proporcional, marginBottom: 20 / proporcional}}>
+                    <div className='d-flex' style={{width: 260 / proporcional, height: 35 / proporcional, marginBottom: 10 / proporcional, cursor: 'pointer'}}
+                    onClick={() => {navigate('conductores'); setOpen(!open)}}>
+                    <img src={menu_taxi} style={{width: 25 / proporcional, height: 25 / proporcional, marginLeft: 5 / proporcional, marginRight: 15 / proporcional,
+                        marginTop: 5 / proporcional, marginBottom: 5 / proporcional}}/>
+                    <p style={{fontSize: 20 / proporcional, color: 'white', lineHeight: `${35 / proporcional}px`, fontWeight: 500, cursor: 'pointer',
+                                marginBottom: 0}}>Conductores</p>
+                    </div>
+                    <div style={{width: 260 / proporcional, height: 2 / proporcional, background: 'white'}}/>
                 </div>
-                <div style={{width: 210 / proporcional, height: 52}}>
-                  <p style={{fontSize: 20 / proporcional, color: 'white', lineHeight: `${35 / proporcional}px`, fontWeight: 500, cursor: 'pointer',
-                            marginBottom: 5}} onClick={() => navigate('home/viajes')}>Viajes</p>
-                  <div style={{width: 210 / proporcional, height: 2 / proporcional, background: 'white'}}/>
+                <div style={{width: 260 / proporcional, height: 57 / proporcional, marginBottom: 20 / proporcional}}>
+                    <div className='d-flex' style={{width: 260 / proporcional, height: 35 / proporcional, marginBottom: 10 / proporcional, cursor: 'pointer'}}
+                    onClick={() => {navigate('usuarios'); setOpen(!open)}}>
+                    <img src={menu_usuario} style={{width: 25 / proporcional, height: 25 / proporcional, marginLeft: 5 / proporcional, marginRight: 15 / proporcional,
+                        marginTop: 5 / proporcional, marginBottom: 5 / proporcional}}/>
+                    <p style={{fontSize: 20 / proporcional, color: 'white', lineHeight: `${35 / proporcional}px`, fontWeight: 500, cursor: 'pointer',
+                                marginBottom: 0}}>Usuarios</p>
+                    </div>
+                    <div style={{width: 260 / proporcional, height: 2 / proporcional, background: 'white'}}/>
                 </div>
-                <div style={{width: 210 / proporcional, height: 52}}>
-                  <p style={{fontSize: 20 / proporcional, color: 'white', lineHeight: `${35 / proporcional}px`, fontWeight: 500, cursor: 'pointer',
-                            marginBottom: 5}} onClick={() => navigate('home/estadisticas')}>Estadísticas</p>
-                  <div style={{width: 210 / proporcional, height: 2 / proporcional, background: 'white'}}/>
+                <div style={{width: 260 / proporcional, height: 57 / proporcional, marginBottom: 20 / proporcional}}>
+                    <div className='d-flex' style={{width: 260 / proporcional, height: 35 / proporcional, marginBottom: 10 / proporcional, cursor: 'pointer'}}
+                    onClick={() => {navigate('calificaciones'); setOpen(!open)}}>
+                    <img src={menu_calificaciones} style={{width: 25 / proporcional, height: 25 / proporcional, marginLeft: 5 / proporcional, marginRight: 15 / proporcional,
+                        marginTop: 5 / proporcional, marginBottom: 5 / proporcional}}/>
+                    <p style={{fontSize: 20 / proporcional, color: 'white', lineHeight: `${35 / proporcional}px`, fontWeight: 500, cursor: 'pointer',
+                                marginBottom: 0}}>Calificaciones</p>
+                    </div>
+                    <div style={{width: 260 / proporcional, height: 2 / proporcional, background: 'white'}}/>
                 </div>
-                <div style={{width: 210 / proporcional, height: 52}}>
-                  <p style={{fontSize: 20 / proporcional, color: 'white', lineHeight: `${35 / proporcional}px`, fontWeight: 500, cursor: 'pointer',
-                            marginBottom: 5}} onClick={() => navigate('home/ingresos')}>Ingresos</p>
-                  <div style={{width: 210 / proporcional, height: 2 / proporcional, background: 'white'}}/>
+                <div style={{width: 260 / proporcional, height: 57 / proporcional, marginBottom: 20 / proporcional}}>
+                    <div className='d-flex' style={{width: 260 / proporcional, height: 35 / proporcional, marginBottom: 10 / proporcional, cursor: 'pointer'}}
+                    onClick={() => {navigate('viajes'); setOpen(!open)}}>
+                    <img src={menu_viajes} style={{width: 25 / proporcional, height: 25 / proporcional, marginLeft: 5 / proporcional, marginRight: 15 / proporcional,
+                        marginTop: 5 / proporcional, marginBottom: 5 / proporcional}}/>
+                    <p style={{fontSize: 20 / proporcional, color: 'white', lineHeight: `${35 / proporcional}px`, fontWeight: 500, cursor: 'pointer',
+                                marginBottom: 0}}>Viajes</p>
+                    </div>
+                    <div style={{width: 260 / proporcional, height: 2 / proporcional, background: 'white'}}/>
                 </div>
-                <div style={{width: 210 / proporcional, height: 52}}>
-                  <p style={{fontSize: 20 / proporcional, color: 'white', lineHeight: `${35 / proporcional}px`, fontWeight: 500, cursor: 'pointer',
-                            marginBottom: 5}} onClick={() => cerrar_sesion()}>Cerrar sesión</p>
-                  <div style={{width: 210 / proporcional, height: 2 / proporcional, background: 'white'}}/>
+                <div style={{width: 260 / proporcional, height: 57 / proporcional, marginBottom: 20 / proporcional}}>
+                    <div className='d-flex' style={{width: 260 / proporcional, height: 35 / proporcional, marginBottom: 10 / proporcional, cursor: 'pointer'}}
+                    onClick={() => {navigate('estadisticas'); setOpen(!open)}}>
+                    <img src={menu_estadisticas} style={{width: 25 / proporcional, height: 25 / proporcional, marginLeft: 5 / proporcional, marginRight: 15 / proporcional,
+                        marginTop: 5 / proporcional, marginBottom: 5 / proporcional}}/>
+                    <p style={{fontSize: 20 / proporcional, color: 'white', lineHeight: `${35 / proporcional}px`, fontWeight: 500, cursor: 'pointer',
+                                marginBottom: 0}}>Estadísticas</p>
+                    </div>
+                    <div style={{width: 260 / proporcional, height: 2 / proporcional, background: 'white'}}/>
                 </div>
-              </div>
-            ) : null
-          }   
-          <Outlet/>     
-        </div>
+                <div style={{width: 260 / proporcional, height: 57 / proporcional, marginBottom: 20 / proporcional}}>
+                    <div className='d-flex' style={{width: 260 / proporcional, height: 35 / proporcional, marginBottom: 10 / proporcional, cursor: 'pointer'}}
+                    onClick={() => {navigate('ingresos'); setOpen(!open)}}>
+                    <img src={menu_ingresos} style={{width: 25 / proporcional, height: 25 / proporcional, marginLeft: 5 / proporcional, marginRight: 15 / proporcional,
+                        marginTop: 5 / proporcional, marginBottom: 5 / proporcional}}/>
+                    <p style={{fontSize: 20 / proporcional, color: 'white', lineHeight: `${35 / proporcional}px`, fontWeight: 500, cursor: 'pointer',
+                                marginBottom: 0}}>Ingreos</p>
+                    </div>
+                    <div style={{width: 260 / proporcional, height: 2 / proporcional, background: 'white'}}/>
+                </div>
+                <div style={{width: 260 / proporcional, height: 57 / proporcional, marginBottom: 20 / proporcional}}>
+                    <div className='d-flex' style={{width: 260 / proporcional, height: 35 / proporcional, marginBottom: 10 / proporcional, cursor: 'pointer'}}
+                    onClick={() => {cerrar_sesion(); setOpen(!open)}}>
+                    <img src={menu_cerrar_sesion} style={{width: 25 / proporcional, height: 25 / proporcional, marginLeft: 5 / proporcional, marginRight: 15 / proporcional,
+                        marginTop: 5 / proporcional, marginBottom: 5 / proporcional}}/>
+                    <p style={{fontSize: 20 / proporcional, color: 'white', lineHeight: `${35 / proporcional}px`, fontWeight: 500, cursor: 'pointer',
+                                marginBottom: 0}}>Cerrar sesión</p>
+                    </div>
+                    <div style={{width: 260 / proporcional, height: 2 / proporcional, background: 'white'}}/>
+                </div>
+            </div>
+          ) : null
+        }   
+        <Outlet/>     
     </div>
   )
 }

@@ -26,7 +26,7 @@ export default function PanelBegin({proporcional}) {
   const begin = useSelector (({begin}) => begin)
 
   useEffect (() => {
-    if (window.localStorage.getItem('usuario')){
+    if (window.localStorage.getItem('session_id')){
       navigate ('/home')
     }
   }, [])

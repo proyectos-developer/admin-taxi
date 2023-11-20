@@ -2,15 +2,13 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
 import axios from 'axios'
 import { constantes } from "../../uri/constantes"
 
-const baseurl = `${constantes().url_principal[0].url}/admin`
+const baseurl = `${constantes().url_principal[0].url}`
 let stateType = ''
 
 export const conductoresdata = createAsyncThunk ('', async (params) => {
     stateType = params.stateType
     switch (stateType){
-        case 'new_conductor':
         case 'update_estado_conductor':
-        case 'update_conductor':
             if (params.reset){
                 return {success: false}
             }else{
@@ -23,7 +21,6 @@ export const conductoresdata = createAsyncThunk ('', async (params) => {
             }
         case 'get_conductores_filtro_total':
         case 'get_conductor':
-        case 'delete_conductor':
             if (params.reset){ 
                 return {success: false}
             }else{
