@@ -79,22 +79,22 @@ app.get('/', (req, res) => {
 app.get('/home', (req, res) => {
   res.sendFile(path.resolve(__dirname, './client/build/home', 'index.html'));
 });
-app.get('/conductores', (req, res) => {
+app.get('/home/conductores', (req, res) => {
   res.sendFile(path.resolve(__dirname, './client/build/home/conductores', 'index.html'));
 });
-app.get('/conductores/detalles-conductor', (req, res) => {
+app.get('/home/conductores/detalles-conductor', (req, res) => {
   res.sendFile(path.resolve(__dirname, './client/build/home/conductores/detalles-conductor', 'index.html'));
 });
-app.get('/usuarios', (req, res) => {
+app.get('/home/usuarios', (req, res) => {
   res.sendFile(path.resolve(__dirname, './client/build/home/usuarios', 'index.html'));
 });
-app.get('/usuarios/detalles-usuario', (req, res) => {
+app.get('/home/usuarios/detalles-usuario', (req, res) => {
   res.sendFile(path.resolve(__dirname, './client/build/home/usuarios/detalles-usuario', 'index.html'));
 });
-app.get('/calificaciones', (req, res) => {
+app.get('/home/calificaciones', (req, res) => {
   res.sendFile(path.resolve(__dirname, './client/build/home/calificaciones', 'index.html'));
 });
-app.get('/calificaciones/detalles-conductor', (req, res) => {
+app.get('/home/calificaciones/detalles-conductor', (req, res) => {
   res.sendFile(path.resolve(__dirname, './client/build/home/calificaciones/detalles-conductor', 'index.html'));
 });
 app.get('/viajes', (req, res) => {
