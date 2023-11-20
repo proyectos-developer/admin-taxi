@@ -76,6 +76,39 @@ app.use(express.static(path.resolve(__dirname, './client/build')));
 app.get('/', (req, res) => {
   res.sendFile(path.resolve(__dirname, './client/build', 'index.html'));
 });
+app.get('/home', (req, res) => {
+  res.sendFile(path.resolve(__dirname, './client/build/home', 'index.html'));
+});
+app.get('/conductores', (req, res) => {
+  res.sendFile(path.resolve(__dirname, './client/build/home/conductores', 'index.html'));
+});
+app.get('/conductores/detalles-conductor', (req, res) => {
+  res.sendFile(path.resolve(__dirname, './client/build/home/conductores/detalles-conductor', 'index.html'));
+});
+app.get('/usuarios', (req, res) => {
+  res.sendFile(path.resolve(__dirname, './client/build/home/usuarios', 'index.html'));
+});
+app.get('/usuarios/detalles-usuario', (req, res) => {
+  res.sendFile(path.resolve(__dirname, './client/build/home/usuarios/detalles-usuario', 'index.html'));
+});
+app.get('/calificaciones', (req, res) => {
+  res.sendFile(path.resolve(__dirname, './client/build/home/calificaciones', 'index.html'));
+});
+app.get('/calificaciones/detalles-conductor', (req, res) => {
+  res.sendFile(path.resolve(__dirname, './client/build/home/calificaciones/detalles-conductor', 'index.html'));
+});
+app.get('/viajes', (req, res) => {
+  res.sendFile(path.resolve(__dirname, './client/build/home/viajes', 'index.html'));
+});
+app.get('/viajes/detalles-viaje', (req, res) => {
+  res.sendFile(path.resolve(__dirname, './client/build/home/viajes/detalles-viaje', 'index.html'));
+});
+app.get('/estadisticas', (req, res) => {
+  res.sendFile(path.resolve(__dirname, './client/build/home/estadisticas', 'index.html'));
+});
+app.get('/ingresos', (req, res) => {
+  res.sendFile(path.resolve(__dirname, './client/build/home/ingresos', 'index.html'));
+});
 
 //Iniciar el servidor
 app.listen (app.get('port'), () => {
